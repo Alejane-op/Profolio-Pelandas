@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Website</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <!-- Navbar Include -->
+  <div w3-include-html="components/navbar.html"></div>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Home Section Include -->
+    <div w3-include-html="components/home.html"></div>
+
+    <!-- About Section Include -->
+    <div w3-include-html="components/about.html"></div>
+
+    <!-- Services Section Include -->
+    <div w3-include-html="components/services.html"></div>
+
+    <!-- Projects Section Include -->
+    <div w3-include-html="components/projects.html"></div>
+
+    <!-- Contact Section Include -->
+    <div w3-include-html="components/contact.html"></div>
+  </main>
+
+  <!-- Footer Include -->
+  <div w3-include-html="components/footer.html"></div>
+
+  <!-- Include HTML script -->
+  <script src="js/include.js"></script>
+  <script>
+    includeHTML(); // Call the function to load included HTML
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    // Run after includes are loaded
+    includeHTML(function () {
+      emailjs.init("aFtsOH5hrHsqiS3Es"); // Your public key
+  
+      const form = document.querySelector('.contact-form');
+      const status = document.getElementById("form-status");
+  
+      if (form && status) {
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+  
+          const name = document.getElementById("nameInput").value;
+          const email = document.getElementById("emailInput").value;
+          const message = document.getElementById("messageInput").value;
+  
+          const templateParams = {
+            name: name,
+            email: email,
+            message: message,
+          };
+  
+          emailjs.send("service_kkkdkkp", "template_j1effno", templateParams)
+            .then(function (response) {
+              console.log("SUCCESS!", response.status, response.text);
+              status.textContent = "Sent successfully!";
+              status.style.color = "green";
+              form.reset();
+            }, function (error) {
+              console.error("FAILED...", error);
+              status.textContent = "There was an error sending your message. Please try again later.";
+              status.style.color = "red";
+            });
+        });
+      } else {
+        console.error("Contact form or status container not found.");
+      }
+    });
+  </script>
+
+</body>
+</html>
